@@ -78,5 +78,6 @@ std::unordered_map<uint32_t, std::string> Encoder::Encode() {
     std::vector<std::pair<uint32_t, std::string>> non_canonical_codes;
     std::string current_code;
     TrieDfs(*queue.begin(), non_canonical_codes, current_code);
-    return MakeCanonicalCodes(non_canonical_codes);
+    codes_ = MakeCanonicalCodes(non_canonical_codes);
+    return codes_;
 }

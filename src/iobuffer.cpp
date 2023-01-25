@@ -1,20 +1,38 @@
 #include "iobuffer.h"
 
-Reader::Reader(std::istream& istream, size_t block_size) : istream_(&istream), block_size_(block_size) {
+Reader::Reader(std::istream& istream) : istream_(istream) {
 }
 
-bool
-uint32_t Reader::Read() {
-    while (bits_buffered_ < block_size_) {
-        buffer_ <<= 8;
+std::string Reader::Read(size_t len) {
+    while (buffer_.size() < len) {
         char c;
         if (!(*istream_ >> c)) {
-            break;
+            throw UnexpectedEOF();
         }
-        buffer_ += c;
+        for (size_t i = 0; i < 8; ++i) {
+            buffer_.push_back('0' + ((c >> (7 - i)) & 1));
+        }
     }
-    uint32_t block = buffer_ >> (bits_buffered_ - block_size_);
-    bits_buffered_ -= block_size_;
-    buffer_ &= (1 << bits_buffered_);
-    return block;
+    auto ans_substr = buffer_.substr(0, len);
+    buffer_.erase(buffer_.begin(), buffer_.begin() + len);
+    return ans_substr;
+}
+
+Writer::Writer(std::ostream& ostream): ostream_(&ostream) {
+}
+
+void Writer::Flush() {
+    if (buffered_ == 8) {
+        *ostream_ << buffer_;
+        buffer_ = 0;
+        buffered_ = 0;
+    }
+}
+
+void Writer::Write(const std::string& str) {
+    for (char c : str) {
+        buffer_ = (buffer_ << 1) + (c - '0');
+        ++buffered_;
+        Flush();
+    }
 }

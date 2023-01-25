@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 struct TrieNode {
     uint32_t val = 0;
@@ -19,3 +20,5 @@ struct TrieNode {
 
     bool IsLeaf() const;
 };
+
+void AddCode(TrieNode* node, const std::string& word, uint32_t val);

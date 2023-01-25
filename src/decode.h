@@ -6,11 +6,15 @@
 
 class Decoder {
 public:
-    explicit Decoder(std::vector<std::pair<std::string, uint32_t>> codes);
+    class DecoderError : public std::exception {};
 
-    bool AddBit();
+    explicit Decoder(const std::vector<std::pair<std::string, uint32_t>>& codes);
 
-    uint32_t Get_Value();
+    bool AddBit(bool bit);
+
+    uint32_t GetValue();
+
+    ~Decoder();
 
 private:
     TrieNode* root_;

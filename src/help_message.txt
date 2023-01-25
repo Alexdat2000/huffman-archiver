@@ -1,0 +1,3 @@
+archiver -c archive_name file1 [file2 ...] - archive files file1, file2, ... and save the result to file archive_name
+archiver -d archive_name - unarchive the files from archive_name and put them into the current directory
+archiver -h - print help on using the program

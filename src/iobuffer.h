@@ -4,15 +4,29 @@
 
 class Reader {
 public:
-    Reader() = default;
+    class UnexpectedEOF : public std::exception {};
 
-    Reader(std::istream& istream, size_t block_size);
+    Reader(std::istream& istream);
 
-    uint32_t Read();
+    std::string Read(size_t len);
 
 private:
-    std::istream* istream_ = nullptr;
-    uint32_t buffer_ = 0;
-    size_t bits_buffered_ = 0;
-    const size_t block_size_ = 0;
+    std::istream& istream_;
+    std::string buffer_;
+};
+
+
+class Writer {
+    Writer() = default;
+
+    explicit Writer(std::ostream& ostream);
+
+    void Write(const std::string& str);
+
+    void Flush();
+
+private:
+    std::ostream* ostream_ = nullptr;
+    unsigned char buffer_ = 0;
+    size_t buffered_ = 0;
 };

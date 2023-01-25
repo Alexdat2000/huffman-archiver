@@ -1,6 +1,7 @@
 add_executable(
         archiver
         archiver.cpp
+        args_parser.cpp
         decode.cpp
         encode.cpp
         iobuffer.cpp
